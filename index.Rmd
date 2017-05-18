@@ -477,7 +477,7 @@ subplot(p, plog, titleX = T, titleY = T, margin = 0.04)
 
 - Model Hyper-parameter Optimisation  
 
-- Performance Matric
+- Performance Metric
 
 ## Model Prediction Error 
 
