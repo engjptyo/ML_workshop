@@ -1,0 +1,1357 @@
+---
+title: "ML Theory"
+author: Eng C L
+date: December 26, 2016
+output:
+  revealjs::revealjs_presentation:
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    self_contained: false
+    reveal_plugins: ["notes", "search", "zoom"]
+#    incremental: true
+    mouseWheel: true
+    fig_caption: true
+#    theme: simple
+#    highlight: pygments    
+#    css: custom.css
+    pandoc_args: [
+      "--title-prefix", "Eng",
+      "--id-prefix", "CL"
+    ]
+---
+<style>
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #f1f1c1;
+}
+
+.reveal table th {
+  font-weight: bold;
+}
+
+.reveal table th,
+.reveal table td {
+  text-align: left;
+  font-size: 120%;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  border-bottom: 1px solid;
+}
+
+.reveal table tr:nth-child(even) {
+    color: white;
+    background-color: #f08a00;
+}
+.reveal table tr:nth-child(odd) {
+    color: white;
+    background-color: #7b0663;
+}
+.reveal table th {
+    color: white;
+    background-color: black;
+}
+
+
+</style>
+
+<style type="text/css">
+.reveal .slide h1 { font-size: 200%; text-decoration: underline; }
+
+.reveal .slides .title {
+  /* Ugly ... */
+  text-shadow: 0px 0px 25px rgb(100,256,0); 
+  font-size: 300%;
+}
+
+.reveal .slide h6 { font-size: 80%;}
+</style>
+<style>
+
+.footer {
+    color: black; background: white;
+    position: fixed; top: 90%;
+    text-align:left; width:100%;
+}
+
+</style>
+<section class="slide level2" data-background="figs/ML_rainbow2.svg">
+
+</section>
+
+
+## {data-background="figs/title_page.png"}
+
+<div style = "float:left; width:50%">
+
+</div>
+ 
+<div style = "float:right; width:50%">
+<br><br><br><br><br><br><br><br><br><br><br>
+<h3 class="fragment highlight-green">"`r Sys.Date()`" | C. L. Eng</h3>
+<h3 class="fragment highlight-green">https://www.yammer.com/ericsson.com#/home | #machinelearning | @echieng</h3>
+</div>
+
+## {data-background="figs/ML_rainbow1.svg"}
+
+<center href="?transition=concave#/transitions"><img src="figs/ML_toc.svg" 
+	max-height="1000px" max-width="1000px" height="700px" width="auto"
+	style="background-color:transparent; border:0px; box-shadow:none;"/></center>
+
+# Background
+
+
+## the Difficulty
+
+<div class='left' style='float:left;width:50%'>
+- <p class="fragment highlight-blue">Quality of data</p>
+      * <h4>Noisy, erronous, bias </h4>
+- <p class="fragment highlight-green">Feature engineering</p>
+      * <h4>attributes that describes the output well </h4>
+- Algorithm selection
+      * <h4>subject to expected output and data availability </h4>
+</div>
+<div class='right' style='float:right;width:50%'>
+- Learning  
+      * <h4>time and infrastructure </h4> 
+- Model complexity  
+      * <h4>accuracy, time, & complexity </h4>
+- Hyper-parameter  
+      * <h4>iterative search to find the optimum parameters </h4>
+</div>
+
+
+## Sources of information
+for this talk...
+
+<div  class="fragment" style='float:left;width:50%'>
+
+- [Machine Learning Introduction - Automating Automation](https://ericoll.internal.ericsson.com/sites/Data_Vizalytics/Documents/MachineLearning/ML_workshop/ML_intro/ML_intro_PA14.pptx)
+
+- Open source commuity - <img src="figs/github-logo.png" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/> <br> <img src="figs/logo-so-color.png" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>
+
+- RStudio blog <img src="figs/RStudio-Logo-Blue-Gradient.png" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
+
+- MOOC (Massive Open Online Course) <img src="figs/MOOC_logo.svg" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
+
+
+</div>
+
+<div class="fragment" style='float:right;width:50%'>
+- Databrick blog <img src="figs/databricks_logoTM_1200px.png" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
+
+- Deep Learning - Goodfellow Ian, Bengio Yoshua, Courville Aaron <img src="figs/deep_learning_goodfellow.jpg" 
+	height="100px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
+
+- ++ many blog articles, news, opinion, research paper, whitepaper, open source API library, etc that will be cited on-line  
+
+</div>
+
+# Objective
+
+## Objective {data-background="figs/ML_five.svg"}
+
+<div  class="fragment" style='float:left;width:50%'>
+
+<ul><li class="fragment">Understand the process</li><br>
+<li class="fragment">Importance of knowing your data</li><br>
+<li class="fragment">Process of creating learning model</li><br>
+<li class="fragment">Multi-dimensional optimisation problem</li><br>
+<li class="fragment">Model complexity and evaluation</li><br></ul>  
+</div>
+
+<div class="fragment" style='float:right;width:50%'>
+
+
+</div>
+
+
+# Overview
+
+## General
+
+<center><img src="figs/ML_general_process.svg" 
+	height="550px" 
+	style="background-color:transparent; border:0px; box-shadow:none;"/>
+	</center>
+<figcaption> <small>High level learning and predicting task</small> </figcaption>
+
+## Concept
+
+<center><img id="myImg" src="figs/ML_learning.svg" 
+	max-height="100px" max-width="100px" height="400px" width="auto"
+	style="background-color:transparent; border:0px; box-shadow:none;"/></center>
+
+<figcaption> <small>Comparison of traditional application software programming, versus machine learning model creation</small> </figcaption>
+
+<h3><center> TO AUTOMATE </center></h3>
+<center> Machine Learning infers rules from data </center>
+
+<center> (implicit programming) </center>
+	
+
+# Basic Learning Task
+
+## Overview
+
+<center><img src="figs/ML_overview2.svg" 
+	max-height="850px" max-width="500px" height="auto" width="auto"
+	style="background-color:transparent; border:0px; box-shadow:none;"/></center>
+
+<figcaption> <small>Learning Task classification</small> </figcaption>
+
+## Learning Method
+
+<br>
+
+Learning      | Description
+-------------: | ------------------------------------------------------------------------
+Supervised    | data set with inputs and expected output - goal to map inputs to outputs
+Unsupervised  | data set without known labels - goal to discover pattern or structure
+Reinforcement | a system automatically tries to understand the situation, learn from the interactions, and choose the optimal path for itself to attend its objective
+Transfer      | a new task can be learned by transferring the knowledge from a related task that has already been learned
+
+
+## Learning Task
+
+<div style = "float:left; width:35%">
+ 
+<right><img src="figs/ML_learning_task.svg" style="float: right; border:0px; box-shadow:none; width: 75%; margin-right: 1%; margin-bottom: 0.5em"/></right>
+<figcaption><small>Learning Task Classification</small></figcaption><br>
+
+</div>
+ 
+<div style = "float:right; width:65%">
+
+Task            | Description
+--------------- | -----------------------------------------------------------------------------------------------------------------------
+<br> Classification  | - Multi-class or binary classification <br> - Ranking <br> - Evaluate with classification error or area under the curve (AUC)
+<br> Regression      | - Predict a real-value response <br> <br>- Gaussian, Poisson, Gamma etc distribution <br> <br> - Evaluate with Mean Square Error  
+<br> Clustering      | - Unsupervised learning (no training labels) <br> - Partition the data; identify clusters or sub-populations <br> - Evaluate with total sum of squares, Bayesian information criterion (BIC)
+<br><br>
+</div>
+
+
+
+## Example (Binary Classification)
+
+<div style = "float:left; width:60%">
+ 
+<img src="figs/ML_eg_class1.png" style="float: left; border:0px; box-shadow:none; width: 75%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>Example of binary classification: to predict if a given house is located in New York City or San Francisco based on the available features</small> </figcaption>
+</div>
+ 
+<div style = "float:right; width:40%">
+<img src="figs/ML_eg_class2.gif" style="float: left; border:0px; box-shadow:none; width: 95%; margin-right: 1%; margin-bottom: 0.5em"/>
+<small>credit: http://www.r2d3.us/visual-intro-to-machine-learning-part-1/^[Visualising Machine Learning; http://www.r2d3.us/visual-intro-to-machine-learning-part-1]</small>
+</div>
+
+
+## Example (M-class Classification)
+
+<img src="figs/ML_eg_mnist1.png" style="float: left; border:0px; box-shadow:none; width: 45%; margin-right: 1%; margin-bottom: 0.5em"/>
+<img src="figs/ML_eg_mnist2.gif" style="float: left; border:0px; box-shadow:none; width: 45%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>Example of multi-class classification: to predict a given hand-written digit value</small> </figcaption>
+<small>credit: AT&T Research^[AT&T Research] </small>
+<br>
+
+<a href="http://scs.ryerson.ca/~aharley/vis/conv/" data-preview-link>- Visualising Convolution Neural Network in Action^[Convolution Neural Networks Viz http://scs.ryerson.ca/~aharley/vis/conv/]
+<img src="http://scs.ryerson.ca/~aharley/images/vis_preview4.png" style="float: auto; border:0px; box-shadow:none; width: 5%; margin-right: 1%; margin-bottom: 0.5em"/>
+</a>
+
+
+## Artificial Intelligence Systems
+
+<div style = "float:left; width:65%">
+ 
+<img src="figs/ML_DL_flowchart.svg" style="float: right; border:0px; box-shadow:none; width: 75%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption></figcaption><br>
+
+</div>
+ 
+<div style = "float:right; width:35%">
+
+<h6>- Different parts of an AI system relate to each other within different AI disciplines</h6>
+<h6>- Blue boxes indicate components that are able to learn from data</h6>
+
+<small>
+<small>@unpublished{Goodfellow-et-al-2016-Book, title={Deep Learning}, author={Ian Goodfellow and Yoshua Bengio and Aaron Courville} note={Book in preparation for MIT Press}, url={http://www.deeplearningbook.org}, year={2016} } ^[Deep Learning; Ian Goodfellow and Yoshua Bengio and Aaron Courville]</small>
+</small>
+</div>
+
+
+## Artificial Neural Networks
+
+<center><img src="figs/ML_neural_lab.svg" style="float: center; border:0px; box-shadow:none; width: 75%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>Artificial neural networks structure and terminology</small> </figcaption></center>
+
+
+
+# Algorithm & Model
+
+## Algorithm
+
+<div style = "float:left; width:99%">
+ 
+<img src="figs/ML_learning2.svg" style="float: left; border:0px; box-shadow:none; width: 70%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Algorithm Category</small></figcaption>
+
+</div>
+
+
+## Learning from Data
+
+<img src="figs/ML_learning_from_data.svg" style="float: left; border:0px; box-shadow:none; width: 70%; margin-right: 1%; margin-bottom: 0.5em"/><br><figcaption> <small>General Algorithm in Learning^[Yaser S. Abu-Mostafa; California Institute of Technology]</small> </figcaption>
+
+## Learning Models
+
+<img src="figs/ML_models.svg" style="float: left; border:0px; box-shadow:none; width: 68%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>Category of Learning Models</small> </figcaption>
+
+## Learning Task and Algorithm
+
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+
+library(plotly)
+library(ggplot2)
+
+df_ml_cla <- read.csv("f:/Data/Machine_Learning/workshop/ML_difficult_2d_data.csv")
+df_ml_cla <- data.frame(x=c(1,2,2,3), y=c(1,2,3,4),value=c(1:4), algo=c("K-means, <br>PCA, <br>Neural Networks, <br>Hierarchical", "Support Vector Machine, <br>Naive Bayes, <br>Nearest Neighbour, <br> Decision Trees", "Linear Regression GLM, <br> Decision Trees, <br> Neural Networks, <br> Ensemble Method","Q(off-policy), <br>SARSA(on-policy)"))
+
+df_ml_cla$x[which(df_ml_cla$x == 1)] <- 'Unsupervised'
+df_ml_cla$x[which(df_ml_cla$x == 2)] <- 'Supervised'
+df_ml_cla$x[which(df_ml_cla$x == 3)] <- 'Reinforcement'
+df_ml_cla$x <- as.factor(df_ml_cla$x)
+
+df_ml_cla$y[which(df_ml_cla$y == 1)] <- 'Clustering'
+df_ml_cla$y[which(df_ml_cla$y == 2)] <- 'Classification'
+df_ml_cla$y[which(df_ml_cla$y == 3)] <- 'Regression'
+df_ml_cla$y[which(df_ml_cla$y == 4)] <- 'Temporal Difference'
+df_ml_cla$y <- as.factor(df_ml_cla$y)
+
+font1 <- list(
+  family = "Courier New, monospace",
+  size = 24,
+  color = "#7f7f7f"
+)
+
+font2 <- list(
+  size = 18,
+  color = "#7f7f7f"
+)
+xlabel <- list(
+  title = "Learning Technique",
+  titlefont = font1,
+  tickfont = font2
+)
+ylabel <- list(
+  title = "Algorithm Category",
+  titlefont = font1,
+  tickfont = font2
+)
+m <- list(l=350, r=50, b=50, t=10, pad=4)
+
+p2d_cla <- plot_ly(df_ml_cla, x = ~x, y = ~y, color = ~x, colors = c('#BF382A', '#0C4B8E'),
+  text = ~paste(algo)) %>%  add_markers(sizes=c(30,30), size=10) %>%
+  layout(xaxis = xlabel, yaxis = ylabel, autosize = F, width = 1000, height = 600, margin = m, legend = list(x = 100, y = 0.5))
+
+p2d_cla
+```
+
+
+## Algorithm Library
+
+- Open source
+
+- H2O.ai - Python, R
+<a href="http://www.h2o.ai/" data-preview-link>
+<img src="http://www.crewspark.com/img/h2o-logo.jpg" style="float: auto; border:0px; box-shadow:none; width: 5%; margin-right: 1%; margin-bottom: 0.5em"/>
+</a>
+
+- Apache Spark MLib - Scala, Python, R
+<a href="http://spark.apache.org/" data-preview-link>
+<img src="http://spark.apache.org/images/spark-logo-trademark.png" style="float: auto; border:0px; box-shadow:none; width: 5%; margin-right: 1%; margin-bottom: 0.5em"/>
+</a>
+
+
+# Process
+
+## Typical Process Flow
+
+<img src="figs/ML_process.svg" style="float: left; border:0px; box-shadow:none; width: 95%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>Process Flow Example</small> </figcaption>
+
+## General Process
+
+<img src="figs/ML_process_general.svg" style="float: left; border:0px; box-shadow:none; width: 95%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>High level process flow - tasks involved in the ML model creation Cycle</small> </figcaption>
+
+## Detail Process Flow
+
+<img src="figs/ML_hyper.svg" style="float: left; border:0px; box-shadow:none; width: 95%; margin-right: 1%; margin-bottom: 0.5em"/>
+
+<figcaption> <small>Detail Learning Process</small> </figcaption>
+<small>credit: Sabastian Raschka 2014 CC Creative Common Attributions^[Sabastian Raschka 2014 CC Creative Common Attributions] </small>
+
+## Data
+
+- Data gathering - various source of data
+      * <h4>may combine different sources </h4>
+      * <h4>complement lack of evidence </h4>
+      * <h4>clearer pattern </h4>
+      
+- Data pre-processing - missing data, inconsistent value, distribution transformation
+
+
+## Data Source
+
+<div style = "float:left; width:100%">
+ 
+<img src="figs/ML_data_gathering2.svg" style="float: left; border:0px; box-shadow:none; width: 80%; margin-right: 1%; margin-bottom: 0.5em"/>
+</div>
+ 
+ 
+
+
+## Data Transformation
+
+```{r  echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+df_pop <-  read.csv("f:/Data/Machine_Learning/workshop/ML_ws_part2/slide_theory/pop_area.csv")
+
+p <- plot_ly(data = df_pop, x = ~Population/100000000, y = ~Area..in.sq.mi./500000, type = 'scatter',
+  mode = 'markers', symbol = 1, symbols = c('circle','x','o'),
+  color = I('black'), marker = list(size = 10), name = "linear") %>%
+  layout(
+    xaxis = list(rangemode = "tozero", title = "Population x 100000000"),
+    yaxis = list(range = c(0, 16), title = "Area x 500000 sq mile"))
+
+
+p <- plot_ly(data = df_pop, x = ~Population/100000000, y = ~Area..in.sq.mi./500000, type = 'scatter',
+  mode = 'markers', marker = list(size = 10, color = 'rgba(255, 182, 193, .7)', symbol = 'x'), name = "linear") %>%
+  layout(
+    xaxis = list(rangemode = "tozero", title = "Population x 100000000"),
+    yaxis = list(range = c(0, 16), title = "Area x 500000 sq mile"))
+
+plog <- plot_ly(data = df_pop, x = ~Population %>% log(), y = ~Area..in.sq.mi. %>% log(), type = 'scatter',
+  mode = 'markers', marker = list(size = 10, color = 'rgba(0,0,128, .7)', symbol = 'hexagon'), name = "log") %>%
+  layout(
+    xaxis = list(rangemode = "tozero"),
+    yaxis = list(range = c(0, 16)))
+```
+
+<div style = "float:left; width:60%">
+ 
+```{r  echo = FALSE, error = FALSE, message = FALSE, warning = FALSE, fig.width = 8, fig.height = 5}
+
+subplot(p, plog, titleX = T, titleY = T, margin = 0.04)
+```
+
+</div>
+ 
+<div style = "float:right; width:40%">
+<h6>- data transformation: apply mathematical function to each data value</h6>
+<h6>- most common data transformation is centering and scaling of a single variable</h6>
+<h6>- each data value is first reduced by the mean, and then divided by the standard deviation</h6>
+<h6>- benefits is to make numerical procedures easier to work with and more stable</h6>
+<h6>- main drawback is that the data becomes harder to interpret</h6>
+<h6>- simple function;  $x^k$, $\sqrt{x}$, $\log(x)$, $e^x$, $\Vert x \Vert$ </h6>
+
+</div>
+
+
+# Nuts and Bolts of Machine Learning
+
+## Task to Do
+
+- Problem Hypothesis  
+
+- Feature Engineering  
+
+- Model Training  
+
+- Model Hyper-parameter Optimisation  
+
+- Performance Matric
+
+## Model Prediction Error 
+
+<div style = "float:left; width:60%">
+ 
+<img src="figs/ML_variance_bias.svg" style="float: right; border:0px; box-shadow:none; width: 80%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Graphical bull-eye illustration of bias and variance</small></figcaption>
+
+</div>
+ 
+<div style = "float:right; width:40%">
+<small>
+
+- Imagine that the center of the target is a model that perfectly predicts the correct values
+
+- Repeat our entire model building process to get a number of separate hits on the target
+
+- Understanding how different sources of error lead to bias and variance helps us improve the data fitting process resulting in more accurate models
+
+credit: Scott Fortmann-Roe,
+http://scott.fortmann-roe.com/docs/BiasVariance.htm^[Scott Fortmann-Roe,
+http://scott.fortmann-roe.com/docs/BiasVariance.htm] 
+
+</small>
+</div>
+
+## Model Prediction Error 2
+
+<div style = "float:left; width:50%">
+- Bias and variance measure 2 different sources of error in a predictor.
+
+
+- function of the data point predictor
+
+$$\hat{\mathbf{\theta}}_m = g(x_{1}, ... , x_{m})$$
+
+- the bias of a predictor is deifned as 
+
+$$Bias(\hat{\mathbf{\theta}}_m) =  {\mathbb{E}\left[\hat{\mathbf{\theta}}_m\right]} - \mathbf{\theta}$$
+
+- how much we expect the difference from the true value of the function
+
+<small><small> Refer to Deep Learning; Ian Goodfellow, Yashua Bengio, and Aaron Courvill; chapter 5.4</small></small>
+</div>
+ 
+<div style = "float:right; width:50%">
+
+- the variance of a predictor is defined as
+$$\mathrm{Var}[\hat{\theta}_m] = \sigma^{2} = \frac{\sum_{i=1}^{m} 
+  \left(x_{i} - \bar{x}\right)^{2}}
+  {m}$$
+
+- how much we expect it to vary as a function of the data sample
+
+- use cross-validation to negotiate this trade-off
+
+- alternatively, use Mean Square Error (MSE)
+
+$$MSE = Bias(\hat{\mathbf{\theta}}_m)^2 + \mathrm{Var}[\hat{\theta}_m] $$
+
+
+</div>
+
+## Model Prediction Error 3
+
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+
+library(plotly)
+library(ggplot2)
+
+
+df_ml_cla <- data.frame(x=c(0,1,2,3,4,5,6,7,8,9), y=c(0,1,1.6,2.5,3.6,3.2,3.575,3.5,3.7,4))
+
+x <- c(0,1,2,3,4,5,6,7,8,9)
+y <- c(0,1,1.6,2.5,3.6,3.2,3.575,3.5,3.7,4)
+
+#x1 <- c(0,1,2,3,4,5,6,7,8,9,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5)
+x1 <- c(0,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9)
+y1 <- c(0,1,1.4,1.6,2.3,2.5,2.8,3.6,3.1,3.2,3.5,3.575,3.45,3.5,3.75,3.7,3.9,4)
+
+
+
+#we will make y the response variable and x the predictor
+#the response variable is usually on the y-axis
+#plot(x,y,pch=19)
+
+#fit first degree polynomial equation:
+fit  <- lm(y~x)
+#second degree
+fit2 <- lm(y~poly(x,2,raw=TRUE))
+#third degree
+fit3 <- lm(y~poly(x,3,raw=TRUE))
+#fourth degree
+fit4 <- lm(y~poly(x,4,raw=TRUE))
+#eighth degree
+fit8 <- lm(y~poly(x,8,raw=TRUE))
+
+#eighth degree
+fit8a <- lm(y1~poly(x1,8,raw=TRUE))
+#generate range of 50 numbers starting from 30 and ending at 160
+xx <- seq(0,9, length=50)
+#plot(x,y,pch=19,ylim=c(0,5))
+#lines(xx, predict(fit, data.frame(x=xx)), col="red")
+#lines(xx, predict(fit2, data.frame(x=xx)), col="green")
+#lines(xx, predict(fit3, data.frame(x=xx)), col="blue")
+#lines(xx, predict(fit4, data.frame(x=xx)), col="purple")
+#lines(xx, predict(fit8, data.frame(x=xx)), col="orange")
+
+font1 <- list(
+  family = "Courier New, monospace",
+  size = 24,
+  color = "#7f7f7f"
+)
+
+font2 <- list(
+  size = 18,
+  color = "#7f7f7f"
+)
+xlabel <- list(
+  title = "Predictor",
+  titlefont = font1,
+  tickfont = font2
+)
+ylabel <- list(
+  title = "Response",
+  titlefont = font1,
+  tickfont = font2
+)
+
+l <- list(
+  font = list(
+    family = "sans-serif",
+    size = 16,
+    color = "#000"),
+  bgcolor = "#E2E2E2",
+  bordercolor = "#FFFFFF",
+  borderwidth = 2,
+  x = 0.1, y = 0.9)
+
+m <- list(l=50, r=50, b=50, t=10, pad=4)
+
+p2d_cla <- plot_ly(hoverinfo = 'all') %>%
+
+  add_trace(x=xx, y=predict(fit, data.frame(x=xx)), name = 'linear', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 10, color = 'rgba(0,0,128, .9)', symbol = 'hexagram-open')) %>%
+  
+  add_trace(x=xx, y=predict(fit3, data.frame(x=xx)), name = 'order 3', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 10, color = 'rgba(255,69,0, .9)', symbol = 'hexagon')) %>%
+  
+  add_trace(x=xx, y=predict(fit8, data.frame(x=xx)), name = 'order 8', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 10, color = 'rgba(0,128,0, .9)', symbol = 'octagon')) %>%  
+
+  add_trace(x=xx, y=predict(fit8a, data.frame(x1=xx)), name = 'order 8x', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 10, color = 'rgba(255,0,0, .9)', symbol = 'pentagon')) %>%  
+  
+  add_trace(df_ml_cla, x = ~x, y = ~y, name = 'original', type = 'scatter', mode = 'markers', opacity = 1, marker = list(size = 10, color = 'rgba(255, 182, 193, .9)', line = list(color = 'rgba(152, 0, 0, .8)', width = 2), symbol = 'x')) %>% 
+
+  add_trace(df_ml_cla, x = ~x1, y = ~y1, name = 'originalx', type = 'scatter', mode = 'markers', opacity = 1, marker = list(size = 10,color = 'rgba(102, 0, 51, .9)', line = list(color = 'rgba(255, 0, 127, .8)', width = 2), symbol = 'square-open-dot')) %>%  
+  
+  layout(xaxis = xlabel, yaxis = ylabel, margin = m, legend = l)
+```
+
+
+
+<div style = "float:left; width:85%">
+ 
+```{r echo = F, fig.width =12, fig.height = 6.5}
+p2d_cla
+```
+
+<small>Assessing Model Bias and Variance</small>
+
+</div>
+ 
+<div style = "float:right; width: 15%">
+<h6> - given a fix amount of data, model parameters govern model overfit, bestfit or underfit </h6>
+
+</div>
+
+
+
+
+
+## Model Prediction Error 4
+
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+
+library(plotly)
+library(ggplot2)
+
+
+df_ml_cla <- data.frame(x=c(0,1,2,3,4,5,6,7,8,9), y=c(0,1,1.6,2.5,3.6,3.2,3.575,3.5,3.7,4))
+
+x <- c(0,1,2,3,4,5,6,7,8,9)
+y <- c(0,1,1.6,2.5,3.6,3.2,3.575,3.5,3.7,4)
+#we will make y the response variable and x the predictor
+#the response variable is usually on the y-axis
+#plot(x,y,pch=19)
+#x1 <- c(0,1,2,3,4,5,6,7,8,9,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5)
+x1 <- c(0,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9)
+y1 <- c(0,1,1.4,1.6,2.3,2.5,2.8,3.6,3.1,3.2,3.5,3.575,3.45,3.5,3.75,3.7,3.9,4)
+
+
+
+#we will make y the response variable and x the predictor
+#the response variable is usually on the y-axis
+#plot(x,y,pch=19)
+
+#fit first degree polynomial equation:
+fit  <- lm(y~x)
+#second degree
+fit2 <- lm(y~poly(x,2,raw=TRUE))
+#third degree
+fit3 <- lm(y~poly(x,3,raw=TRUE))
+#fourth degree
+fit4 <- lm(y~poly(x,4,raw=TRUE))
+#eighth degree
+fit8 <- lm(y~poly(x,8,raw=TRUE))
+
+#eighth degree
+fit8a <- lm(y1~poly(x1,8,raw=TRUE))
+#generate range of 50 numbers starting from 30 and ending at 160
+xx <- seq(0,9, length=50)
+#plot(x,y,pch=19,ylim=c(0,5))
+#lines(xx, predict(fit, data.frame(x=xx)), col="red")
+#lines(xx, predict(fit2, data.frame(x=xx)), col="green")
+#lines(xx, predict(fit3, data.frame(x=xx)), col="blue")
+#lines(xx, predict(fit4, data.frame(x=xx)), col="purple")
+#lines(xx, predict(fit8, data.frame(x=xx)), col="orange")
+
+font1 <- list(
+  family = "Courier New, monospace",
+  size = 24,
+  color = "#7f7f7f"
+)
+
+font2 <- list(
+  size = 18,
+  color = "#7f7f7f"
+)
+xlabel <- list(
+  title = "Predictor",
+  titlefont = font1,
+  tickfont = font2
+)
+ylabel <- list(
+  title = "Response",
+  titlefont = font1,
+  tickfont = font2
+)
+
+l <- list(
+  font = list(
+    family = "sans-serif",
+    size = 16,
+    color = "#000"),
+  bgcolor = "#E2E2E2",
+  bordercolor = "#FFFFFF",
+  borderwidth = 2,
+  x = 0.1, y = 0.9)
+
+a <- list(
+  x = 6,
+  y = 0,
+  text = "annotation a",
+  xref = "x",
+  yref = "y",
+  showarrow = FALSE,
+  arrowhead = 0,
+  ax = 0,
+  ay = 0
+)
+
+b <- list(
+  x = 6,
+  y = 0,
+  text = "annotation b",
+  xref = "x",
+  yref = "y",
+  showarrow = FALSE,
+  arrowhead = 0,
+  ax = 0,
+  ay = 0
+)
+
+m <- list(l=50, r=50, b=50, t=10, pad=4)
+
+
+######
+
+p4 <-  plot_ly(df_ml_cla, x = ~x, y = ~y, name = 'original', type = 'scatter', mode = 'markers', opacity = 1, symbol = 1, marker = list(size = 10, color = 'rgba(255, 182, 193, .9)', line = list(color = 'rgba(152, 0, 0, .8)', width = 2), symbol = 'x'))
+
+p1 <-  p4 %>% add_trace(x=xx, y=predict(fit, data.frame(x=xx)), name = 'linear', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 5, color = 'rgba(0,0,128, .9)', symbol = 'hexagram-open'))
+  
+p2 <-  p4 %>% add_trace(x=xx, y=predict(fit3, data.frame(x=xx)), name = 'order 3', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 5, color = 'rgba(255,69,0, .9)', symbol = 'hexagon'))
+  
+p3 <-  p4 %>% add_trace(x=xx, y=predict(fit8, data.frame(x=xx)), name = 'order 8', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 5, color = 'rgba(0,128,0, .9)', symbol = 'octagon'))  
+
+p3a <- plot_ly(df_ml_cla, x = ~x1, y = ~y1, name = 'originalx', type = 'scatter', mode = 'markers', opacity = 1, marker = list(size = 10,color = 'rgba(102, 0, 51, .9)', line = list(color = 'rgba(255, 0, 127, .8)', width = 2), symbol = 'square-open-dot')) %>% add_trace(x=xx, y=predict(fit8a, data.frame(x1=xx)), name = 'order 8x', type = 'scatter', mode = 'lines+markers', opacity = 0.5, marker = list(size = 5, color = 'rgba(255,0,0, .9)', symbol = 'pentagon'))  
+
+
+p5 <- subplot(p4, p1, p2, p3,nrows = 2, shareX = TRUE, shareY = TRUE) %>% layout(legend = list(x = 100, y = 0.5))
+
+p5a <- subplot(p3,p3a,nrows = 2, shareX = TRUE, shareY = TRUE) %>% layout(legend = list(x = 100, y = 0.5))
+#%>% layout(autosize = F, width = 1000, height = 500)
+
+
+```
+
+<div style = "float:left; width:85%">
+ 
+```{r echo = F, fig.width =12, fig.height = 6.5}
+p5
+```
+
+</div>
+ 
+<div style = "float:right; width: 15%">
+<h6> clock-wise from top-left, <br><br>(a) raw data   <br><br>(b) underfitting [high bias]   <br><br>(c) best fitting   <br><br>(d) overfitting [high variance] </h6>
+
+</div>
+
+
+## Model Prediction error 5
+
+<div style = "float:left; width:85%">
+ 
+```{r echo = F, fig.width =12, fig.height = 6.5}
+p5a
+```
+
+</div>
+ 
+<div style = "float:right; width: 15%">
+<h6> for the same polynomial of 8, top - overfitting, bottom - just right with more data </h6>
+<h6> additional tends to generalize the model</h6>
+
+</div>
+
+## Model Prediction Error 6
+
+<div style = "float:left; width:50%">
+- **Bias** - is an error due to erroneous or overly simplistic assumptions in the learning algorithm
+
+- cause  the model underfitting your data, 
+
+- making it hard for it to have high predictive accuracy 
+
+- hard to generalize your knowledge from the training set to the test set
+</div>
+ 
+<div style = "float:right; width:50%">
+
+- **Variance** - is error due to excessive complexity in the learning algorithm
+
+- cause the algorithm being highly sensitive to high degrees of variation in your training data  
+
+- cause your model to overfit the data  
+
+- carrying too much noise from your training data for your model to be very useful for your test data
+
+</div>
+
+## Confusion Matrix (Classification)
+
+<div style = "float:left; width:60%">
+ 
+<img src="figs/ML_conf_matrix.svg" style="float: left; border:0px; box-shadow:none; width: 98%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Confusion matrix for classfication model</small></figcaption>
+
+</div>
+ 
+<div style = "float:right; width:40%">
+<h6>Example: Classify Spam** Email</h6>
+
+<h6>- TP: Messages that have been blocked by the anti-spam filters and match the definition of spam</h6>
+
+<h6>- FP: Legitimate message mistakenly marked as spam</h6>  
+
+<h6>- TN: Legitimate message is correctly marked as legitimate message</h6>  
+
+<h6>- FN: Spam is mistakenly marked as legitimate message</h6>
+
+<small><small>** unsolicited bulk email</small> </small>
+
+
+## Confusion Matrix (Explain)
+
+<div style = "float:left; width:50%">
+ 
+<img src="figs/ML_conf_matrix2.svg" style="float: center; border:0px; box-shadow:none; width: 90%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Confusion matrix for classfication model</small></figcaption>
+
+</div>
+ 
+<div style = "float:right; width:50%">
+
+
+<h6>Example: Classify Spam** Email</h6>
+
+<h6>- TP: Messages that have been blocked by the anti-spam filters and match the definition of spam</h6>
+
+<h6>- FP: Legitimate message mistakenly marked as spam</h6>  
+
+<h6>- TN: Legitimate message is correctly marked as legitimate message</h6>  
+
+<h6>- FN: Spam is mistakenly marked as legitimate message</h6>
+
+<small><small>** unsolicited bulk email</small> </small>
+
+
+## Precision & Recall (Classification)
+
+<div style = "float:left; width:60%">
+ 
+<img src="figs/ML_precision.svg" style="float: left; border:0px; box-shadow:none; width: 98%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Accuracy, Precision & Recall</small></figcaption>
+
+</div>
+ 
+<div style = "float:right; width:40%">
+
+<h6 align = left>- Precision,</h6>  
+<small>$p = \frac{True\ Positive}{Predicted\ Positive}$</small><br>
+<small>$$p = \frac{TP}{\left(TP + FP \right)}$$</small>
+
+
+<h6 align = left>- Recall,</h6>  
+<small>$p = \frac{True\ Positive}{Actual\ Positive}$</small><br>
+<small>$$r = \frac{TP}{\left(TP + FN \right)}$$</small>
+
+
+<h6 align = left>- Accuracy,</h6>  
+
+<small>$$acc = \frac{\left(TP + TN\right)}{\left(TP + TN + FP + FN \right)}$$</small>
+
+
+<h6 align = left>- F-measure,</h6>  
+
+<small>$$F = \frac{2}{\left(\frac{1}{p} + \frac{1}{r} \right)}$$</small>
+
+
+
+</div>
+
+
+## Strategy to Improve Model (Traing, cross-validation)
+
+<div style = "float:left; width:80%">
+ 
+<img src="figs/ML_xvalid_error.svg" style="float: left; border:0px; box-shadow:none; width: 90%; margin-right: 1%; margin-bottom: 0.5em"/>
+
+
+</div>
+ 
+<div style = "float:right; width:20%">
+
+<h6>- For a fix amount of data, the typical error for both training and cross-valiation varies</h6>
+
+<h6>- If data is high bias - more complex model will reduce the error
+If data is high variance - more complex model will reduce error more (due to overfitting), and with validation data, it will not performance well</h6>
+
+</div>
+
+
+## Hyper-Parameter Optimisation
+
+<div style = "float:left; width:70%">
+ 
+Example of hyper-parameters
+
+- Random Forest:
+      * <h4>No. of trees, depth of trees, sample rate, etc<h4>
+- Gradient Boosting Machine (GBM):
+      * <h4>No. of trees, depth of trees, learning rate, sample rate, etc<h4>
+- Deep Learning:
+      * <h4>Activation, No. of hidden layers, hidden layer size, L1, L2, dropout ratios, etc<h4>
+
+</div>
+ 
+<div style = "float:right; width:30%">
+
+</div>
+
+
+## Optimisation Technique
+
+<div style = "float:left; width:60%">
+ 
+<img src="figs/ML_hyper_search.svg" style="float: left; border:0px; box-shadow:none; width: 98%; margin-right: 1%; margin-bottom: 0.5em"/>
+</div>
+ 
+<div style = "float:right; width:40%">
+
+<h6>- Manual search
+    * insight into hyper-parameter response function
+    * no technical overhead or barrier  </h6>
+  
+<h6>- Grid search
+     * simple to implement
+     * reliable in low dimensional spaces  </h6>
+
+<h6>- Random search </h6>
+
+
+<small> Figure 1: Grid and random search of nine trials for optimizing a function f(x, y) = g(x) + h(y) = g(x) with low effective dimensionality. Above each square g(x) is shown in green, and left of each square h(y) is shown in yellow. With grid search, nine trials only test g(x)in three distinct places. With random search, all nine trials explore distinct values of g. This failure of grid search is the rule rather than the exception in high dimensional hyper-parameter optimization.</small>
+
+<small> http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf^[Random Search for Hyper-Parameter Optimization; http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf] </small>
+
+</div>
+
+
+
+
+
+
+## Activation Function
+
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+
+library(plotly)
+
+x <- seq(-pi,pi,by=0.01)
+
+y1 <- (exp(x)-exp(-x))/(exp(x)+exp(-x)) # Tanh
+
+y2 <- ifelse(x<0,0,x) # Rectifier (ReLu)
+
+y3 <- x # identity
+
+y4 <- ifelse(x<0,0,1) # Step
+
+y5 <- 1/(1+exp(-x)) # Logistic
+
+y6 <- atan(x) # Arc Tan
+
+y7 <- x/(1+abs(x)) # Softsign
+
+y8 <- ifelse(x<0,0.01*x,x) # Leaky Rectifier (Leaky ReLu)
+
+alpha <- 0.02
+
+y9 <- ifelse(x<0,alpha*x,x) # Parameteric rectifier liner unit (PReLu)
+
+y10 <- log((1+exp(x))) # SoftPlus
+
+data <- data.frame(x, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10)
+
+p2 <- plot_ly(data, x = ~x, y = ~y1, name = 'Tanh', type = 'scatter', mode = 'lines') %>%
+  add_trace(y = ~y2, name = 'Rectifier', mode = 'lines') %>% 
+  add_trace(y = ~y3, name = 'Identity', mode = 'lines') %>% 
+  add_trace(y = ~y4, name = 'Step', mode = 'lines') %>%   
+  add_trace(y = ~y5, name = 'Logistic', mode = 'lines') %>%   
+  add_trace(y = ~y6, name = 'Arc Tan', mode = 'lines') %>%  
+  add_trace(y = ~y7, name = 'Softsign', mode = 'lines') %>% 
+  add_trace(y = ~y8, name = 'Leaky ReLu', mode = 'lines') %>% 
+  add_trace(y = ~y9, name = 'PReLu', mode = 'lines') %>% 
+  add_trace(y = ~y10, name = 'SoftPlus', mode = 'lines') %>% 
+  layout(
+  title = "Neuron Activation Function", 
+  xaxis = list(
+    showgrid = TRUE, 
+    title = "x", 
+    zeroline = FALSE
+  ), 
+  yaxis = list(
+    showline = FALSE, 
+    title = "y"
+  ),
+  legend = list(x = 100, 
+                y = 0.5, 
+                font = list(family = "sans-serif",size = 28, color = "#000"))
+)
+
+```
+
+
+<div style = "float:left; width:100%">
+ 
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 7}
+p2
+```
+
+<small> Neuron Activation Function </small>
+
+
+## Model performance matrices (error)
+
+<div style = "float:left; width:95%">
+ 
+<img src="figs/ML_error_flow.svg" style="float: left; border:0px; box-shadow:none; width: 99%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Model performance matrices - error analysis flow</small></figcaption>
+
+</div>
+ 
+<div style = "float:right; width:5%">
+<small>
+<small>credit: Baidu's Andrew Ng's Nuts and Bolts of Deep Learning^[Baidu's Andrew Ng's Nuts and Bolts of Deep Learning]</small>
+</small>
+</div>
+
+
+## Debug
+
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+
+library(plotly)
+library(ggplot2)
+
+df_ml2d <- read.csv("f:/Data/Machine_Learning/workshop/ML_difficult_2d_data.csv")
+
+df_ml2d$x[which(df_ml2d$x == 5)] <- 'Correct'
+df_ml2d$x[which(df_ml2d$x == 15)] <- 'Incorrect Base Case'
+df_ml2d$x[which(df_ml2d$x == 25)] <- 'Incorrect Recursive Call'
+df_ml2d$x[which(df_ml2d$x == 35)] <- 'Incorrect Seed Case'
+df_ml2d$x <- as.factor(df_ml2d$x)
+
+df_ml2d$y[which(df_ml2d$y == 5)] <- 'Correct'
+df_ml2d$y[which(df_ml2d$y == 15)] <- 'Bug in Conditional Statement'
+df_ml2d$y[which(df_ml2d$y == 25)] <- 'Bug in Recursive Function Call'
+df_ml2d$y[which(df_ml2d$y == 35)] <- 'Bug in Recursive Computation'
+df_ml2d$y <- as.factor(df_ml2d$y)
+
+font1 <- list(
+  family = "Courier New, monospace",
+  size = 24,
+  color = "#7f7f7f"
+)
+
+font2 <- list(
+  size = 18,
+  color = "#7f7f7f"
+)
+xlabel <- list(
+  title = "Algorithm Correctness",
+  titlefont = font1,
+  tickfont = font2
+)
+ylabel <- list(
+  title = "Bug in Implementation",
+  titlefont = font1,
+  tickfont = font2
+)
+m <- list(l=350, r=50, b=50, t=10, pad=4)
+
+p2d <- plot_ly(df_ml2d, x = ~x, y = ~y, color = ~Code, colors = c('#BF382A', '#0C4B8E')) %>%  add_markers(sizes=c(30,30), size=10) %>%
+  layout(xaxis = xlabel, yaxis = ylabel, autosize = F, width = 1200, height = 400, margin = m, legend = list(x = 100, y = 0.5))
+         #%>% layout(margin=m)
+
+```
+
+
+<div style = "float:left; width:90%">
+ 
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE, fig.width = 8, fig.height = 6}
+p2d
+```
+
+<small>http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html^[Why Machine Learning is Difficult; http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html]</small>
+</div>
+ 
+<div style = "float:right; width:10%">
+<small>
+<h6>- relatively 'hard' problem </h6>
+<h6>- creativity, experimentation and tenacity </h6>
+<h6>- difficulty involves building an intuition </h6>
+<h6>- algorithm or implementation </h6></small>
+</div>
+
+
+## Debug 3D Problem
+
+```{r echo = FALSE, error = FALSE, message = FALSE, warning = FALSE}
+
+library(plotly)
+library(ggplot2)
+
+df_ml <- read.csv("f:/Data/Machine_Learning/workshop/ML_difficult_data.csv")
+
+df_ml$x[which(df_ml$x == 5)] <- 'Correct'
+df_ml$x[which(df_ml$x == 15)] <- 'Non-optimal Learning Rate'
+df_ml$x[which(df_ml$x == 25)] <- 'Incorrect Gradients'
+df_ml$x <- as.factor(df_ml$x)
+
+df_ml$y[which(df_ml$y == 5)] <- 'Correct'
+df_ml$y[which(df_ml$y == 15)] <- 'Incorrect Gradient Computation'
+df_ml$y[which(df_ml$y == 25)] <- 'Incorrect Feature Computation'
+df_ml$y <- as.factor(df_ml$y)
+
+df_ml$z[which(df_ml$z == 5)] <- 'Correct'
+df_ml$z[which(df_ml$z == 15)] <- 'Overfitting (Too Complex'
+df_ml$z[which(df_ml$z == 25)] <- 'Non-optimal Regularization'
+
+font1 <- list(
+  family = "Courier New, monospace",
+  size = 16,
+  color = "#7f7f7f"
+)
+xlabel3d <- list(
+  title = "Algorithm Correctness",
+  titlefont = font1
+)
+ylabel3d <- list(
+  title = "Implementation Correctness",
+  titlefont = font1
+)
+zlabel3d <- list(
+  title = "Learning Model Issue",
+  titlefont = font1
+)
+
+m <- list(l=50, r=50, b=50, t=10, pad=4)
+
+p3d <- plot_ly(df_ml, x = ~x, y = ~y, z = ~z, color = ~Code, colors = c('#BF382A', '#0C4B8E')) %>%
+  add_markers(sizes=c(10,10), size=10) %>%
+  layout(scene = list(xaxis = xlabel3d,
+                     yaxis = ylabel3d,
+                     zaxis = zlabel3d), margin = m, legend = list(x = 100, y = 0.5))
+```
+
+<div style = "float:left; width:80%">
+ 
+
+```{r echo = F, fig.width = 11, fig.height = 7}
+p3d
+```
+
+</div>
+ 
+<div style = "float:right; width:20%">
+<small>
+- exponentially diffiult debugging <br><br>
+- algoritm or implementation or hyper-parameter<br><br>
+- 3D: Implementation, Algorithm, Model<br><br>
+
+<small>http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html</small>
+
+</small>
+```{r, echo = F, fig.width = 4, fig.height = 4}
+
+```
+
+</div>
+
+
+## Machine Debug 1
+
+<div style = "float:left; width:70%">
+
+<img src="figs/ML_why_difficult1.svg" style="float: left; border:0px; box-shadow:none; width: 83%; margin-right: 1%; margin-bottom: 0.5em"/>
+
+</div>
+ 
+<div style = "float:right; width:30%">
+
+<h6> Implementation and Algorithm </h6>
+
+<h6>- relatively 'hard' problem </h6>
+<h6>- creativity, experimentation and tenacity </h6>
+<h6>- difficulty involves building an intuition </h6>
+<h6>- algorithm or implementation </h6>
+
+<small>http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html</small>
+</div>
+
+
+
+## Machine Debug 2
+
+<div style = "float:left; width:80%">
+
+<img src="figs/ML_why_difficult2.svg" style="float: left; border:0px; box-shadow:none; width: 120%; margin-right: 1%; margin-bottom: 0.5em"/>
+
+</div>
+ 
+<div style = "float:right; width:20%">
+
+<h6> Implementation, Algorithm and Model </h6>
+
+<h6>- Exponentially Difficult Debugging </h6>
+<h6>- Algorithm or Implementation or Hyper-parameter </h6>
+
+
+<small>http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html</small>
+</div>
+
+
+## Machine Debug 3
+
+<img src="figs/ML_why_difficult3.svg" style="float: left; border:0px; box-shadow:none; width: 85%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Implementation, Algorithm, Model and Data</small></figcaption>
+<small>http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html</small>
+
+## Use case speedtest prediction
+
+<div style = "float:left; width:60%">
+ 
+<img src="figs/ML_uc_speedtest_PA2.svg" style="float: left; border:0px; box-shadow:none; width: 98%; margin-right: 1%; margin-bottom: 0.5em"/>
+</div>
+ 
+<div style = "float:right; width:40%">
+<h6> Building user experience prediction based on network statistical counter data</h6>
+
+<h6>- Open data: MIC operator benchmark data </h6>
+<h6>- Operator data: eNodeB statistical counter </h6>
+<h6>- Operator data: network topology and configuration</h6>
+</div>
+
+
+<figcaption><small></small></figcaption>
+
+
+
+# Summary
+
+## Big Picture
+
+
+<img src="figs/ML_systems.svg" style="float: left; border:0px; box-shadow:none; width: 95%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption> <small>Machine Learning systems - the supporting components play a major role</small> </figcaption>
+
+<small> Hidden Technical Debt in Machine Learning Systems, NIPS 2015 - Google; https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf^[Hidden Technical Debt in Machine Learning Systems, NIPS 2015 - Google; https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf]</small>
+
+
+## Key Takeaways
+
+
+<div style = "float:left; width:60%">
+
+<img src="figs/ML_summary_flow.svg" style="float: left; border:0px; box-shadow:none; width: 99%; margin-right: 1%; margin-bottom: 0.5em"/>
+<figcaption><small>Key stage of machine learning</small></figcaption>
+</div>
+ 
+<div style = "float:right; width:40%">
+- know your data
+- be resourceful on open data
+- algorithm selection depends on the task objective
+- hypothesis and evaluation criteria
+- techniques to address model overfitting/underfitting
+- hyper-parameter search & optimisation
+- requires getting a lot of little details right
+</div>
+
+
+## the Difficulty (Recap)
+
+<div class='left' style='float:left;width:50%'>
+- <p class="fragment highlight-blue">Quality of data</p>
+      * <h4>Noisy, erronous, bias </h4>
+- <p class="fragment highlight-green">Feature engineering</p>
+      * <h4>attributes that describes the output well </h4>
+- Algorithm selection
+      * <h4>subject to expected output and data availability </h4>
+</div>
+<div class='right' style='float:right;width:50%'>
+- Learning  
+      * <h4>time and infrastructure </h4> 
+- Model complexity  
+      * <h4>accuracy, time, & complexity </h4>
+- Hyper-parameter  
+      * <h4>iterative search to find the optimum parameters </h4>
+</div>
+
+
+## Open source that makes this possible
+- slide with reveal.js in rmarkdown
+- graphic with inkscape <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Inkscape.logo.svg" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>
+- chart with plotly <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Plotly_Logo.png" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/> & ggplot in R <img src="https://www.r-project.org/logo/Rlogo.svg" 
+	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>
+	
+<small>? Reserved the rights to be wrong</small>
+
+## End
+
+<img src="figs/richard_feynman.svg" style="float: center; border:0px; box-shadow:none; width: 75%; margin-right: 1%; margin-bottom: 0.5em"/>
+
+
+# Reference
+
