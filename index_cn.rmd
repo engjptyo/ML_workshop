@@ -1,5 +1,5 @@
 ---
-title: "Machine Learning Theory"
+title: "机器学习理论"
 author: Eng C L
 date: December 26, 2016
 output:
@@ -99,57 +99,57 @@ output:
 	max-height="1000px" max-width="1000px" height="700px" width="auto"
 	style="background-color:transparent; border:0px; box-shadow:none;"/></center>
 
-# Background
+# 背景
 
 
-## the Difficulty
+## 困难
 
 <div class='left' style='float:left;width:50%'>
-- <p class="fragment highlight-blue">Quality of data</p>
-      * <h4>Noisy, erronous, bias </h4>
-- <p class="fragment highlight-green">Feature engineering</p>
-      * <h4>attributes that describes the output well </h4>
-- Algorithm selection
-      * <h4>subject to expected output and data availability </h4>
+- <p class="fragment highlight-blue">数据质量  </p>
+      * <h4>嘈杂，侮辱，偏见 </h4>
+- <p class="fragment highlight-green">特征工程</p>
+      * <h4>描述输出的属性 </h4>
+- 算法选择
+      * <h4>受制于预期的产出和数据的可用性 </h4>
 </div>
 <div class='right' style='float:right;width:50%'>
-- Learning  
-      * <h4>time and infrastructure </h4> 
-- Model complexity  
-      * <h4>accuracy, time, & complexity </h4>
-- Hyper-parameter  
-      * <h4>iterative search to find the optimum parameters </h4>
+- 学习  
+      * <h4>时间和基础设施 </h4> 
+- 模型复杂性  
+      * <h4>准确性，时间和复杂性 </h4>
+- 超参数 
+      * <h4>迭代搜索找到最优参数 </h4>
 </div>
 
 
-## Sources of information
-for this talk...
+## 信息来源
+这个讲话..
 
 <div  class="fragment" style='float:left;width:50%'>
 
-- [Machine Learning Introduction - Automating Automation](https://ericoll.internal.ericsson.com/sites/Data_Vizalytics/Documents/MachineLearning/ML_workshop/ML_intro/ML_intro_PA14.pptx)
+- [机器学习简介 - 自动化自动化](https://ericoll.internal.ericsson.com/sites/Data_Vizalytics/Documents/MachineLearning/ML_workshop/ML_intro/ML_intro_PA14.pptx)
 
-- Open source commuity - <img src="figs/github-logo.png" 
+- 开放源码 - <img src="figs/github-logo.png" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/> <br> <img src="figs/logo-so-color.png" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>
 
-- RStudio blog <img src="figs/RStudio-Logo-Blue-Gradient.png" 
+- RStudio博客 <img src="figs/RStudio-Logo-Blue-Gradient.png" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
 
-- MOOC (Massive Open Online Course) <img src="figs/MOOC_logo.svg" 
+- MOOC (大规模开放在线课程) <img src="figs/MOOC_logo.svg" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
 
 
 </div>
 
 <div class="fragment" style='float:right;width:50%'>
-- Databricks blog <img src="figs/databricks_logoTM_1200px.png" 
+- Databricks博客 <img src="figs/databricks_logoTM_1200px.png" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
 
-- Deep Learning - Goodfellow Ian, Bengio Yoshua, Courville Aaron <img src="figs/deep_learning_goodfellow.jpg" 
+- 深度学习 - Goodfellow Ian, Bengio Yoshua, Courville Aaron <img src="figs/deep_learning_goodfellow.jpg" 
 	height="100px" style="background-color:transparent; border:0px; box-shadow:none;"/>  
 
-- ++ many blog articles, news, opinion, research paper, whitepaper, open source API library, etc that will be cited in-line  
+- ++许多博客文章，新闻，意见，研究论文，白皮书，开源API库等将被引用在线 
 
 </div>
 
