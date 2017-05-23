@@ -8,7 +8,7 @@ output:
       slideNumber: true
       previewLinks: true
     self_contained: false
-    reveal_plugins: ["notes", "search", "zoom"]
+    reveal_plugins: ["notes", "search", "zoom", "chalkboard"]
 #    incremental: true
     mouseWheel: true
     fig_caption: true
