@@ -106,7 +106,7 @@ output:
 
 <div class='left' style='float:left;width:50%'>
 - <p class="fragment highlight-blue">Quality of data</p>
-      * <h4>Noisy, erronous, bias </h4>
+      * <h4>Noisy, erroneous, bias </h4>
 - <p class="fragment highlight-green">Feature engineering</p>
       * <h4>attributes that describes the output well </h4>
 - Algorithm selection
@@ -127,9 +127,9 @@ for this talk...
 
 <div  class="fragment" style='float:left;width:50%'>
 
-- [Machine Learning Introduction - Automating Automation](https://ericoll.internal.ericsson.com/sites/Data_Vizalytics/Documents/MachineLearning/ML_workshop/ML_intro/ML_intro_PA14.pptx)
+- [Machine Learning Introduction - Automating Automation]()
 
-- Open source commuity - <img src="figs/github-logo.png" 
+- Open source community - <img src="figs/github-logo.png" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/> <br> <img src="figs/logo-so-color.png" 
 	height="50px" style="background-color:transparent; border:0px; box-shadow:none;"/>
 
@@ -514,7 +514,7 @@ http://scott.fortmann-roe.com/docs/BiasVariance.htm]
 
 $$\hat{\mathbf{\theta}}_m = g(x_{1}, ... , x_{m})$$
 
-- the bias of a predictor is deifned as 
+- the bias of a predictor is defined as 
 
 $$Bias(\hat{\mathbf{\theta}}_m) =  {\mathbb{E}\left[\hat{\mathbf{\theta}}_m\right]} - \mathbf{\theta}$$
 
@@ -842,7 +842,7 @@ p5a
 <div style = "float:left; width:60%">
  
 <img src="figs/ML_conf_matrix.svg" style="float: left; border:0px; box-shadow:none; width: 98%; margin-right: 1%; margin-bottom: 0.5em"/>
-<figcaption><small>Confusion matrix for classfication model</small></figcaption>
+<figcaption><small>Confusion matrix for classification model</small></figcaption>
 
 </div>
  
@@ -865,7 +865,7 @@ p5a
 <div style = "float:left; width:50%">
  
 <img src="figs/ML_conf_matrix2.svg" style="float: center; border:0px; box-shadow:none; width: 90%; margin-right: 1%; margin-bottom: 0.5em"/>
-<figcaption><small>Confusion matrix for classfication model</small></figcaption>
+<figcaption><small>Confusion matrix for classification model</small></figcaption>
 
 </div>
  
@@ -1205,8 +1205,8 @@ p3d
  
 <div style = "float:right; width:20%">
 <small>
-- exponentially diffiult debugging <br><br>
-- algoritm or implementation or hyper-parameter<br><br>
+- exponentially difficult debugging <br><br>
+- algorithm or implementation or hyper-parameter<br><br>
 - 3D: Implementation, Algorithm, Model<br><br>
 
 <small>http://ai.stanford.edu/~zayd/why-is-machine-learning-hard.html</small>
@@ -1322,7 +1322,7 @@ p3d
 
 <div class='left' style='float:left;width:50%'>
 - <p class="fragment highlight-blue">Quality of data</p>
-      * <h4>Noisy, erronous, bias </h4>
+      * <h4>Noisy, erroneous, bias </h4>
 - <p class="fragment highlight-green">Feature engineering</p>
       * <h4>attributes that describes the output well </h4>
 - Algorithm selection
